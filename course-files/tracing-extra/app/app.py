@@ -23,7 +23,7 @@ def init_tracer(service):
 
     config = Config(
         config={
-            'sampler': {
+            'hello': {
                 'type': 'const',
                 'param': 1,
             },
@@ -37,10 +37,11 @@ def init_tracer(service):
 
 
 #starter code
-tracer = init_tracer('test-service')
+tracer = init_tracer('hello')
 
 # not entirely sure but I believe there's a flask_opentracing.init_tracing() missing here
 # redis_opentracing.init_tracing(tracer, trace_all_classes=False)
+tracing = FlaskTracing(tracer, True, app)
 
 with tracer.start_span('first-span') as span:
     span.set_tag('first-tag', '100')
@@ -48,6 +49,8 @@ with tracer.start_span('first-span') as span:
 
 @app.route('/')
 def hello_world():
+    with tracer.start_span('Alpha') as span:
+        span.set_tag('hello;', "world")
     return 'Hello World!'
 
 
