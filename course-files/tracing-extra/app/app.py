@@ -54,16 +54,24 @@ def hello_world():
 
 @app.route('/alpha')
 def alpha():
-    for i in range(100):
-        do_heavy_work() # removed the colon here since it caused a syntax error - not sure about its purpose?
-        if i % 100 == 99:
-            time.sleep(10)
+    # Add your test function here
+    with tracer.start_span('Alpha') as span:
+        span.set_tag('method;', "alpha")
+        for i in range(100):
+            do_heavy_work() # removed the colon here since it caused a syntax error - not sure about its purpose?            
+            if i % 100 == 99:
+                span.set_tag('sleep;', "start")
+                time.sleep(10)
+                span.set_tag('wakeup;', "start")
+    span.set_tag('endpoint;', "alpha")
     return 'This is the Alpha Endpoint!'
 
  
 @app.route('/beta')
 def beta():
-    r = requests.get("https://www.google.com/search?q=python")
+    with tracer.start_span('Alpha') as span:
+        r = requests.get("https://www.google.com/search?q=python")
+        span.set_tag('http.method;', r)
     dict = {}
     for key, value in r.headers.items():
         print(key, ":", value)
