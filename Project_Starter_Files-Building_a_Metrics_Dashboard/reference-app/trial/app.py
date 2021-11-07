@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 
+from prometheus_flask_exporter.multiprocess import GunicornInternalPrometheusMetrics
+
 from jaeger_client import Config
 from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
 from opentelemetry import trace
@@ -20,6 +22,10 @@ trace.get_tracer_provider().add_span_processor(
 )
 
 app = Flask(__name__)
+metrics = GunicornInternalPrometheusMetrics(app)
+# static information as metric
+metrics.info('app_info', 'Application info', version='1.0.3')
+
 FlaskInstrumentor().instrument_app(app)
 RequestsInstrumentor().instrument()
 

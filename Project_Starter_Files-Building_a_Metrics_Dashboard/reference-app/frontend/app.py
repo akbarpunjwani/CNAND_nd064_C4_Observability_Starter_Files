@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request
 
+from prometheus_flask_exporter.multiprocess import GunicornInternalPrometheusMetrics
+
 app = Flask(__name__)
+metrics = GunicornInternalPrometheusMetrics(app)
+# static information as metric
+metrics.info('app_info', 'Application info', version='1.0.3')
 
 @app.route('/')
 def homepage():
