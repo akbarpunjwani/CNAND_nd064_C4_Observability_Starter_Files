@@ -4,6 +4,8 @@ metadata:
   name: do-visit-counter-frontend
   labels:
     name: do-visit-counter-frontend
+  annotations:
+    "sidecar.jaegertracing.io/inject": "true"
 spec:
   replicas: 1
   selector:
@@ -16,7 +18,7 @@ spec:
     spec:
       containers:
         - name: do-visit-counter-frontend
-          image: punjwaniakbar/do-visit-counter-frontend:v1
+          image: punjwaniakbar/do-visit-counter-frontend:v2
           imagePullPolicy: Always
           env:
             - name: COUNTER_ENDPOINT
