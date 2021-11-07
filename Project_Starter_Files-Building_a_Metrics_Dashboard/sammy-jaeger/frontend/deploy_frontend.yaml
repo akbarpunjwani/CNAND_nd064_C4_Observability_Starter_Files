@@ -22,7 +22,7 @@ spec:
           imagePullPolicy: Always
           env:
             - name: COUNTER_ENDPOINT
-              value: "http://do-visit-counter-backend.default.svc.cluster.local:5000"
+              value: "http://do-visit-counter-backend.observability.svc.cluster.local:5000"
           ports:
             - name: frontend-port
               containerPort: 8000
