@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: do-visit-counter-frontend
-          image: your_dockerhub_username/do-visit-counter-frontend:v1
+          image: punjwaniakbar/do-visit-counter-frontend:v1
           imagePullPolicy: Always
           env:
             - name: COUNTER_ENDPOINT
