@@ -16,7 +16,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    sidecar.jaegertracing.io/inject: "true"
+    "sidecar.jaegertracing.io/inject": "true"
   labels:
     name: hotrod
   name: hotrod
