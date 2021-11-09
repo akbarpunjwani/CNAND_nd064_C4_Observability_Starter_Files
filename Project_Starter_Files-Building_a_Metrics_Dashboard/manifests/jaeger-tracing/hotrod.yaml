@@ -41,6 +41,6 @@ spec:
               protocol: TCP
           env:
             - name: JAEGER_AGENT_HOST
-              value: hotrod-traces-agent.{namespace}.svc.cluster.local
+              value: hotrod-traces-agent.observability.svc.cluster.local
             - name: JAEGER_AGENT_PORT
               value: "6831"
