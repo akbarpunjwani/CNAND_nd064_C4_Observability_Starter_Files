@@ -38,7 +38,7 @@ spec:
           - name: JAEGER_AGENT_HOST
             value: simplest-agent.observability.svc.cluster.local
           - name: JAEGER_AGENT_PORT
-            value: 6831
+            value: "6831"
           ports:
           - containerPort: 8080
             name: hotrod
