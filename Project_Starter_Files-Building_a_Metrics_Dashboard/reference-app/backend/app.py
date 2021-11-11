@@ -1,3 +1,5 @@
+import requests
+import logging
 from flask import Flask, render_template, request, jsonify
 
 from prometheus_flask_exporter.multiprocess import GunicornInternalPrometheusMetrics
@@ -56,11 +58,10 @@ def init_tracer(service):
     # this call also sets opentracing.tracer
     return config.initialize_tracer()
 
-tracer = init_tracer('first-service')
+tracer = init_tracer('backendapp-service')
 
 @app.route('/')
 def homepage():
-    return "Hello World"
     with tracer.start_span('get-python-jobs') as span:
         homepages = []
         res = requests.get('https://jobs.github.com/positions.json?description=python')
@@ -68,30 +69,32 @@ def homepage():
         for result in res.json():
             try:
                 homepages.append(requests.get(result['company_url']))
+                span.log_kv({'event':'Site Found', 'value':str(result['company_url'])})
             except:
-                return "Unable to get site for %s" % result['company']
-        
-
-
+                span.log_kv({'event':'Failed URL', 'value':str(result['company'])})
+                return "Unable to get site for %s" % result['company']                
+    # return "Hello World"
     return jsonify(homepages)
 
 
 @app.route('/api')
 @metrics.do_not_track()
 def my_api():
-    answer = "something"
+    with tracer.start_span('my_api | GET') as span:
+        answer = "something"
     return jsonify(repsonse=answer)
 
 @app.route('/star', methods=['POST'])
 @metrics.do_not_track()
 def add_star():
-  star = mongo.db.stars
-  name = request.json['name']
-  distance = request.json['distance']
-  star_id = star.insert({'name': name, 'distance': distance})
-  new_star = star.find_one({'_id': star_id })
-  output = {'name' : new_star['name'], 'distance' : new_star['distance']}
-  return jsonify({'result' : output})
+    with tracer.start_span('add_star | POST') as span:
+        star = mongo.db.stars
+        name = request.json['name']
+        distance = request.json['distance']
+        star_id = star.insert({'name': name, 'distance': distance})
+        new_star = star.find_one({'_id': star_id })
+        output = {'name' : new_star['name'], 'distance' : new_star['distance']}
+    return jsonify({'result' : output})
 
 if __name__ == "__main__":
     app.run()
