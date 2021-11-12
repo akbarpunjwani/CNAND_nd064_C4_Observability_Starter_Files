@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: punjwaniakbar/project3-backend:v1
+          image: punjwaniakbar/project3-backend:v2
           env:
           - name: JAEGER_AGENT_HOST
             value: simplest-agent.observability.svc.cluster.local
