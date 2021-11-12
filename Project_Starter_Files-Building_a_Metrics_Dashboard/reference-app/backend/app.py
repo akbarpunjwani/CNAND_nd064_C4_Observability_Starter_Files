@@ -64,15 +64,16 @@ tracer = init_tracer('backendapp-service')
 def homepage():
     with tracer.start_span('get-python-jobs') as span:
         homepages = []
-        res = requests.get('https://jobs.github.com/positions.json?description=python')
+        res = requests.get('https://jsonplaceholder.typicode.com/todos')
         span.set_tag('first-tag', len(res.json()))
         for result in res.json():
             try:
-                homepages.append(requests.get(result['company_url']))
-                span.log_kv({'event':'Site Found', 'value':str(result['company_url'])})
+                homepages.append(result['title'])
+                a=result['title'][30,2]
+                span.log_kv({'event':'Site Found', 'value':str(result['title'])})
             except:
-                span.log_kv({'event':'Failed URL', 'value':str(result['company'])})
-                return "Unable to get site for %s" % result['company']                
+                span.log_kv({'event':'Failed URL', 'value':str(result)})
+                # return "Unable to get site for %s" % result['company']                
     # return "Hello World"
     return jsonify(homepages)
 
@@ -81,7 +82,10 @@ def homepage():
 @metrics.do_not_track()
 def my_api():
     with tracer.start_span('my_api | GET') as span:
+        span.set_tag('myown-tag', 'WOW TAG!')
         answer = "something"
+        for c in answer:
+            span.log_kv('event', 'char-by-char', 'value', str(c))
     return jsonify(repsonse=answer)
 
 @app.route('/star', methods=['POST'])
