@@ -80,13 +80,22 @@ def homepage():
     # return "Hello World"
     return jsonify(homepages)
 
+@app.route('/api1')
+@metrics.do_not_track()
+def my_api():
+    with tracer.start_span('my_api | GET1') as span:
+        span.set_tag('myown-tag', 'WOW TAG!')
+        answer = "NEW Message"
+        for c in answer:
+            span.log_kv('event', 'char-by-char', 'value', str(c))
+    return jsonify(repsonse=answer)
 
 @app.route('/api')
 @metrics.do_not_track()
 def my_api():
     with tracer.start_span('my_api | GET1') as span:
         span.set_tag('myown-tag', 'WOW TAG!')
-        answer = "something"
+        answer = "something NEW"
         for c in answer:
             span.log_kv('event', 'char-by-char', 'value', str(c))
     return jsonify(repsonse=answer)
