@@ -21,6 +21,7 @@ spec:
       containers:
         - name: backend
           image: punjwaniakbar/project3-backend:v2
+          imagePullPolicy: Always
           env:
           - name: JAEGER_AGENT_HOST
             value: simplest-agent.observability.svc.cluster.local
