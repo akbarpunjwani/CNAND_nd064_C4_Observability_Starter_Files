@@ -65,7 +65,10 @@ def homepage():
     with tracer.start_span('get-python-jobs') as span:
         homepages = []
         res = requests.get('https://jsonplaceholder.typicode.com/todos')
-        span.set_tag('first-tag', len(res.json()))
+        try:
+            span.set_tag('first-tag', len(res.json()))
+        except:
+            span.set_tag('first-tag', 'len(res.json()) Failed')
         for result in res.json():
             try:
                 homepages.append(result['title'])
@@ -81,7 +84,7 @@ def homepage():
 @app.route('/api')
 @metrics.do_not_track()
 def my_api():
-    with tracer.start_span('my_api | GET') as span:
+    with tracer.start_span('my_api | GET1') as span:
         span.set_tag('myown-tag', 'WOW TAG!')
         answer = "something"
         for c in answer:
