@@ -26,6 +26,10 @@ spec:
             value: simplest-agent.observability.svc.cluster.local
           - name: JAEGER_AGENT_PORT
             value: "6831"
+          - name: PROMETHEUS_MULTIPROC_DIR
+            value: /tmp
+          - name: prometheus_multiproc_dir
+            value: /tmp
           ports:
           - containerPort: 8080
             name: backend
