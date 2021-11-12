@@ -82,8 +82,8 @@ def homepage():
 
 @app.route('/api1')
 @metrics.do_not_track()
-def my_api():
-    with tracer.start_span('my_api | GET1') as span:
+def my_api1():
+    with tracer.start_span('my_api1 | GET1') as span:
         span.set_tag('myown-tag', 'WOW TAG!')
         answer = "NEW Message"
         for c in answer:
