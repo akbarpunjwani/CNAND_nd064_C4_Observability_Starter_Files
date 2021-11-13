@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend
+  name: backend-deploy
   labels:
     app: backend
   annotations:
@@ -39,7 +39,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend
+  name: backend-svc
   labels:
     app: backend
   annotations:
@@ -50,14 +50,15 @@ spec:
     app: backend
   ports:
     - port: 8081
+      name: backend
       targetPort: 8080
   type: LoadBalancer
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: backend
-  namespace: observability
+  name: backend-svcmon
+  namespace: monitoring
   labels:
     app: backend
     release: prometheus
@@ -71,4 +72,4 @@ spec:
     interval: 15s
   namespaceSelector:
     matchNames:
-    - observability
+    - default
