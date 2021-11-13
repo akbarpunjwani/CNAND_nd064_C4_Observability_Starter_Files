@@ -32,6 +32,11 @@ metrics = GunicornInternalPrometheusMetrics(app)
 # static information as metric
 metrics.info('app_info', 'Application info', version='1.0.3')
 
+by_path_counter = metrics.counter(
+    'by_path_counter', 'Request count by request paths',
+    labels={'path': lambda: request.path}
+)
+
 FlaskInstrumentor().instrument_app(app)
 RequestsInstrumentor().instrument()
 
@@ -61,6 +66,7 @@ def init_tracer(service):
 tracer = init_tracer('backendapp-service')
 
 @app.route('/')
+@by_path_counter
 def homepage():
     with tracer.start_span('get-python-jobs') as span:
         homepages = []
@@ -72,7 +78,7 @@ def homepage():
         for result in res.json():
             try:
                 homepages.append(result['title'])
-                a=result['title'][30,2]
+                a=str(result['title'])[30:]
                 span.log_kv({'event':'Site Found', 'value':str(result['title'])})
             except:
                 span.log_kv({'event':'Failed URL', 'value':str(result)})
@@ -81,13 +87,14 @@ def homepage():
     return jsonify(homepages)
 
 @app.route('/api1')
+@by_path_counter
 @metrics.do_not_track()
 def my_api1():
     with tracer.start_span('my_api1 | GET1') as span:
         span.set_tag('myown-tag', 'WOW TAG!')
         answer = "NEW Message"
         for c in answer:
-            span.log_kv('event', 'char-by-char', 'value', str(c))
+            span.log_kv({'event': 'char-by-char', 'value': str(c)})
     return jsonify(repsonse=answer)
 
 @app.route('/api')
@@ -97,10 +104,11 @@ def my_api():
         span.set_tag('myown-tag', 'WOW TAG!')
         answer = "something NEW"
         for c in answer:
-            span.log_kv('event', 'char-by-char', 'value', str(c))
+            span.log_kv({'event': 'char-by-char', 'value': str(c)})
     return jsonify(repsonse=answer)
 
 @app.route('/star', methods=['POST'])
+@by_path_counter
 @metrics.do_not_track()
 def add_star():
     with tracer.start_span('add_star | POST') as span:
@@ -111,6 +119,8 @@ def add_star():
         new_star = star.find_one({'_id': star_id })
         output = {'name' : new_star['name'], 'distance' : new_star['distance']}
     return jsonify({'result' : output})
+
+metrics.register_default(by_path_counter)
 
 if __name__ == "__main__":
     app.run()
