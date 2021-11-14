@@ -11,10 +11,10 @@ $(document).ready(function () {
                 'Access-Control-Allow-Origin': '*'
                 },
             success: function (result) {
-                $("#firstbutton").toggleClass("btn-primary:focus");
+                $('#firstbutton').toggleClass('btn-primary focus');
                 },
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                $("#firstbutton").toggleClass("btn-primary:focus");
+                $('#firstbutton').toggleClass('btn-primary focus');
                 },
         });
     });
@@ -29,10 +29,10 @@ $(document).ready(function () {
                 'Access-Control-Allow-Origin': '*'
                 },
             success: function (result) {
-                $("#secondbutton").toggleClass("btn-primary:focus");
+                $('#secondbutton').toggleClass('btn-primary focus');
                 },
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                $("#secondbutton").toggleClass("btn-primary:focus");
+                $('#secondbutton').toggleClass('btn-primary focus');
                 },
         });
     });    

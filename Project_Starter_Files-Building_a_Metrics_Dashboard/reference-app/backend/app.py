@@ -1,5 +1,6 @@
 import requests
 import logging
+from random import randint
 from flask import Flask, render_template, request, jsonify
 
 from flask import json
@@ -79,11 +80,10 @@ def homepage():
         except:
             span.set_tag('first-tag', 'len(res.json()) Failed')
         for result in res.json():
-            try:
-                homepages.append(result['title'])
-                a=str(result['title'])[30:]
+            homepages.append(result['title'])
+            if (randint(1, len(res.json()))%2) == 0:                      
                 span.log_kv({'event':'Site Found', 'value':str(result['title'])})
-            except:
+            else:
                 span.log_kv({'event':'Failed URL', 'value':str(result)})
                 # return "Unable to get site for %s" % result['company']                
     # return "Hello World"
