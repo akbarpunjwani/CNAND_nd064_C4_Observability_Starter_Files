@@ -94,10 +94,11 @@ def homepage():
 def my_api1():
     with tracer.start_span('my_api1 | GET1') as span:
         span.set_tag('myown-tag', 'WOW TAG!')
-        answer = "NEW Message"
-        for c in answer[30:]:
+        answer = "Method log_kv has runtime errors"
+        a=answer[1000:1010:0]
+        for c in answer:
             span.log_kv({'event': 'char-by-char', 'value': str(c)})
-    return jsonify(repsonse=answer)
+    return jsonify(response=answer)
 
 @app.route('/api')
 @metrics.do_not_track()
@@ -107,7 +108,7 @@ def my_api():
         answer = "something NEW"
         for c in answer:
             span.log_kv({'event': 'char-by-char', 'value': str(c)})
-    return jsonify(repsonse=answer)
+    return jsonify(response=answer)
 
 @app.route('/star', methods=['POST'])
 @by_path_counter

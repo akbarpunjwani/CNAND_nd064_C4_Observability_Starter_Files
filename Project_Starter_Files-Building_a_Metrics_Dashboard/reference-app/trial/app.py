@@ -5,6 +5,9 @@ from prometheus_flask_exporter.multiprocess import GunicornInternalPrometheusMet
 
 from jaeger_client import Config
 from jaeger_client.metrics.prometheus import PrometheusMetricsFactory
+from random import randint
+from time import sleep
+
 from opentelemetry import trace
 from opentelemetry.exporter import jaeger
 from opentelemetry.sdk.trace import TracerProvider
@@ -56,10 +59,22 @@ def init_tracer(service):
     # this call also sets opentracing.tracer
     return config.initialize_tracer()
 
-tracer = init_tracer('first-service')
+tracer = init_tracer('trial-service')
+
+@app.route('/check')
+def my_api1():
+    with tracer.start_span('check | GET') as span:
+        span.set_tag('check-tag', 'TRIAL IS SUCCESS!')
+        answer = "Trial Tracing with Span, Tag & Logs"
+        for c in answer:
+            span.log_kv({'event': 'char-by-char', 'value': str(c)})
+    return jsonify(repsonse=answer)
+
 
 @app.route('/')
 def homepage():
+    with tracer.start_span('sleep-b4-render') as span:
+        sleep(randint(1,10))
     return render_template("main.html")
     with tracer.start_span('get-python-jobs') as span:
         homepages = []
