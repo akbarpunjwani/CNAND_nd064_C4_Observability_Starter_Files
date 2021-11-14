@@ -1,9 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trial-app
+  name: trial-deploy
+  labels:
+    app: trial
+  annotations:
+    "sidecar.jaegertracing.io/inject": "true"
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: trial
@@ -15,17 +19,55 @@ spec:
       containers:
       - name: trial
         image: punjwaniakbar/project3-trial:v1
+        imagePullPolicy: Always
+        env:
+        - name: JAEGER_AGENT_HOST
+          value: simplest-agent.observability.svc.cluster.local
+        - name: JAEGER_AGENT_PORT
+          value: "6831"
+        - name: PROMETHEUS_MULTIPROC_DIR
+          value: /tmp
+        - name: prometheus_multiproc_dir
+          value: /tmp
         ports:
         - containerPort: 8080
+          name: frontend
+          protocol: TCP
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: trial-service
+  name: trial-svc
+  labels:
+    app: trial
+  annotations:
+    prometheus.io/port: "9090"
+    prometheus.io/scrape: "true"
 spec:
   selector:
     app: trial
   ports:
     - port: 8082
+      name: trial
       targetPort: 8080
   type: LoadBalancer
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: trial-svcmon
+  namespace: monitoring
+  labels:
+    app: trial
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: trial
+  endpoints:
+  - port: trial
+    path: /metrics
+    interval: 15s
+  namespaceSelector:
+    matchNames:
+    - default

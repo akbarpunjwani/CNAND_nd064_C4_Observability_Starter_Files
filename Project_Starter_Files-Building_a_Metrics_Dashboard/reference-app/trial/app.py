@@ -29,7 +29,6 @@ metrics.info('app_info', 'Application info', version='1.0.3')
 FlaskInstrumentor().instrument_app(app)
 RequestsInstrumentor().instrument()
 
-
 #config = Config(
 #        config={},
 #        service_name='your-app-name',

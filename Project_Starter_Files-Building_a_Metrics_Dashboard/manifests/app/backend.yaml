@@ -19,22 +19,22 @@ spec:
         tier: backend
     spec:
       containers:
-        - name: backend
-          image: punjwaniakbar/project3-backend:v1
-          imagePullPolicy: Always
-          env:
-          - name: JAEGER_AGENT_HOST
-            value: simplest-agent.observability.svc.cluster.local
-          - name: JAEGER_AGENT_PORT
-            value: "6831"
-          - name: PROMETHEUS_MULTIPROC_DIR
-            value: /tmp
-          - name: prometheus_multiproc_dir
-            value: /tmp
-          ports:
-          - containerPort: 8080
-            name: backend
-            protocol: TCP
+      - name: backend
+        image: punjwaniakbar/project3-backend:v1
+        imagePullPolicy: Always
+        env:
+        - name: JAEGER_AGENT_HOST
+          value: simplest-agent.observability.svc.cluster.local
+        - name: JAEGER_AGENT_PORT
+          value: "6831"
+        - name: PROMETHEUS_MULTIPROC_DIR
+          value: /tmp
+        - name: prometheus_multiproc_dir
+          value: /tmp
+        ports:
+        - containerPort: 8080
+          name: backend
+          protocol: TCP
 ---
 apiVersion: v1
 kind: Service
