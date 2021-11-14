@@ -47,7 +47,7 @@ spec:
   selector:
     app: trial
   ports:
-    - port: 8082
+    - port: 8083
       name: trial
       targetPort: 8080
   type: LoadBalancer
