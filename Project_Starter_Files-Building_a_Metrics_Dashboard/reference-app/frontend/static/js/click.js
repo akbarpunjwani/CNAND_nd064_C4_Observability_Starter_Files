@@ -12,7 +12,10 @@ $(document).ready(function () {
                 },
             success: function (result) {
                 $("#firstbutton").toggleClass("btn-primary:focus");
-                }
+                },
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                $("#firstbutton").toggleClass("btn-primary:focus");
+                },
         });
     });
 
@@ -27,7 +30,10 @@ $(document).ready(function () {
                 },
             success: function (result) {
                 $("#secondbutton").toggleClass("btn-primary:focus");
-            }
+                },
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                $("#secondbutton").toggleClass("btn-primary:focus");
+                },
         });
     });    
 });
