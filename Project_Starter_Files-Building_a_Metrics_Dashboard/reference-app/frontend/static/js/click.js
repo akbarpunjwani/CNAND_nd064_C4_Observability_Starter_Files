@@ -38,6 +38,6 @@ $(document).ready(function () {
                     reject('Some Error received at AJAX');
                     },
             });
-        }
+        })
     });    
 });
