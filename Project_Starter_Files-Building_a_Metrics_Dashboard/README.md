@@ -67,5 +67,42 @@ For each month, we have service minutes of 30 days x 24 hrs x 60 mins = 43,200 m
 
 ## Final Dashboard
 *DONE*: Create a Dashboard containing graphs that capture all the metrics of your KPIs and adequately representing your SLIs and SLOs. Include a screenshot of the dashboard here, and write a text description of what graphs are represented in the dashboard.  
+![FinalDashboard](./answer-img/FinalDashboardWithMetrics.jpg?raw=true "FinalDashboard")
+
+### Description of HEAT MAPs used:
+In our dashboard the Heat Maps are used to monitor the Traffic Inflow at each of the services using the below PromQL:
+```sum(flask_http_request_duration_seconds_bucket{method="GET",container="backend"}) by (container)```
+
+### Description of METRICS showing Request Status wise Counts:
+The counts indicates the overall counts of the GET request for each category of response type i-e success, error 4x and error 5x. Below PromQL is used:
+```sum(flask_http_request_total{method="GET",container=~"backend"}) by(container, status)```
+
+### Description of Uptime Monitoring graph for each Container
+This shows the heartbeat of our services for every minute as to when the services were down and for how long. Below PromQL is used:
+```sum(up{container=~"backend"}) by (pod)```
+
+### Description of Latency Metrics in millisecond for each microservice
+This metrics shows the average response time in millisecond disregard of the response category whether it was success or error. Below PromQL is used:
+``` sum(flask_http_request_duration_seconds_sum{method="GET",status="200",container="backend"}) by(container) / (sum(flask_http_request_duration_seconds_count{method="GET",status="200",container="backend"}) by (container)) * 1000 ```
+
+### Description of Success Percentage
+This metric indicates the overall ratio of success that our web user experienced out of all the request attempts made. Below PromQL is used:
+``` ((sum(flask_http_request_duration_seconds_count{method="GET", status="200", container="backend"}) by(container))/(sum(flask_http_request_duration_seconds_count{method="GET", container="backend"}) by(container)))*100 ```
+
+### Description of Timeseries graph of 4x Errors
+This graph illustrates the occurances of the Errors with 401, 404 and 410 status. It shows time and points of total requests that got the error response. Below PromQL is used:
+```sum(flask_http_request_total{container=~"backend",status=~"403|404|410"}) by (status,container)```
+
+### Description of Timeseries graph of 5x Errors
+This graph illustrates the occurances of the Errors with Internal Server Error status. It shows time and points of total requests that got the error response. Below PromQL is used:
+```sum(flask_http_request_total{container=~"backend",status=~"500|503"}) by (status,container)```
+
+For Saturation, the builtin out of the box dashboard shall be used, named as ```General / Kubernetes / Compute Resources / Cluster```
+![Compute Resources](./answer-img/FinalDashboardWithMetrics_BuiltIn.jpg?raw=true "FinalDashboard_BuiltIn")
+
+
+
+
+
 
 
