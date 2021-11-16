@@ -3,12 +3,15 @@
 ## Verify the monitoring installation
 
 *DONE:* run `kubectl` command to show the running pods and services for all components. Take a screenshot of the output and include it here to verify the installation
+![Kubectl Monitoring](./answer-img/monitoringinstallation_kubectl.jpg?raw=true "Kubectl Monitoring")
 
 ## Setup the Jaeger and Prometheus source
 *DONE:* Expose Grafana to the internet and then setup Prometheus as a data source. Provide a screenshot of the home page after logging into Grafana.
+![Grafana Homepage after Admin Login](./answer-img/grafanahomepage_adminlogin.jpg?raw=true "Grafana Homepage after Adminlogin")
 
 ## Create a Basic Dashboard
 *DONE:* Create a dashboard in Grafana that shows Prometheus as a source. Take a screenshot and include it here.
+![Basic Dashboard Prometheus](./answer-img/BasicDashboard_Prometheus.jpg?raw=true "Basic Dashboard Prometheus")
 
 ## Describe SLO/SLI
 *DONE:* Describe, in your own words, what the SLIs are, based on an SLO of *monthly uptime* and *request response time*.
@@ -24,12 +27,16 @@ Utilization: To understand for how many duration the resources are utilized to s
 
 ## Create a Dashboard to measure our SLIs
 *DONE:* Create a dashboard to measure the uptime of the frontend and backend services We will also want to measure to measure 40x and 50x errors. Create a dashboard that show these values over a 24 hour period and take a screenshot.
+![Uptime Dashboard Last6hours](./answer-img/UptimeDashboard_Last6hours.jpg?raw=true "Uptime Dashboard")
+![Uptime Dashboard Last24hours](./answer-img/UptimeDashboard_Last6hours.jpg?raw=true "UptimeDashboard Last24hours")
 
 ## Tracing our Flask App
 *DONE:*  We will create a Jaeger span to measure the processes on the backend. Once you fill in the span, provide a screenshot of it here.
+![TracingFlask BackendAPIendpoint](./answer-img/TracingFlask_BackendAPIendpoint.jpg?raw=true "Tracing Flask BackendAPIendpoint")
 
 ## Jaeger in Dashboards
 *DONE:* Now that the trace is running, let's add the metric to our current Grafana dashboard. Once this is completed, provide a screenshot of it here.
+![Jaeger Explore In Grafana BackendAPI](./answer-img/JaegerExploreInGrafana_BackendAPI.jpg?raw=true "JaegerExploreInGrafana BackendAPI")
 
 ## Report Error
 *OUTOFSCOPE:* Using the template below, write a trouble ticket for the developers, to explain the errors that you are seeing (400, 500, latency) and to let them know the file that is causing the issue.
@@ -97,11 +104,22 @@ This graph illustrates the occurances of the Errors with 401, 404 and 410 status
 This graph illustrates the occurances of the Errors with Internal Server Error status. It shows time and points of total requests that got the error response. Below PromQL is used:
 ```sum(flask_http_request_total{container=~"backend",status=~"500|503"}) by (status,container)```
 
+
 For Saturation, the builtin out of the box dashboard shall be used, named as ```General / Kubernetes / Compute Resources / Cluster```
 ![Compute Resources](./answer-img/FinalDashboardWithMetrics_BuiltIn.jpg?raw=true "FinalDashboard_BuiltIn")
 
+### Description of CPU Utilization and Memory Utilization
+These metric indicates the overall computing and memory resources been consumed by the kubernetes cluster. As an example the 93.6% utilization is red alert showing that compute power is almost fully utilized and action is required. Similarly, utilization of 74.5% indicates we are still left with 25% of memory and hence the status is not that alarming.
 
+### Description of CPU Usage & Memoru Usage graph
+This graph indicates that which resources of which NAMESPACE is consuming how much of computing power. As an example we can observe that monitoring namespace which is running Prometheus and Grafana is consuming most of the computing power. Also, the timeline is shown to help us know the timeseries based status.
 
+![Compute Resources](./answer-img/FinalDashboardWithMetrics_BuiltIn2.jpg?raw=true "FinalDashboard_BuiltIn")
+### Description of Current Network Usage
+This graph shows the bandwidth of network been consumed. In case this matches with the KPI we set than it is OK else red alert in order to avoid any saturation at network level which may cause SLI to be difficult to achieve
+
+### Description of Disk Read+Write Throughput
+This graphical representation along with Tabular dashboard panel indicates the current throughput and utilization of the storage. The figures should be within the Error Budget so that we do not loose out the KPI or the Service Level Indicator.
 
 
 
