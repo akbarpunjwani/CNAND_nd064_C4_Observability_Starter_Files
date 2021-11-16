@@ -21,20 +21,23 @@ $(document).ready(function () {
 
     //http://trial.observability.svc.cluster.local
     $("#secondbutton").click(function () {
-        $.ajax({
-            url: "http://localhost:3004", 
-            dataType: 'jsonp',
-            crossDomain: true,
-            headers: {
-                'Access-Control-Allow-Origin': '*'
-                },
-            success: function (result) {
-                $('#secondbutton').toggleClass('btn-primary focus');
-                },
-            error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                $('#secondbutton').toggleClass('btn-primary focus');
-                reject('Some Error received at AJAX');
-                },
-        });
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: "http://localhost:3004", 
+                dataType: 'jsonp',
+                crossDomain: true,
+                headers: {
+                    'Access-Control-Allow-Origin': '*'
+                    },
+                success: function (data, textStatus, jqXHR) {
+                    $('#secondbutton').toggleClass('btn-primary focus');
+                    resolve(data);
+                    },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    $('#secondbutton').toggleClass('btn-primary focus');
+                    reject('Some Error received at AJAX');
+                    },
+            });
+        }
     });    
 });
