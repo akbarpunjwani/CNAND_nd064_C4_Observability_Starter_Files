@@ -33,6 +33,7 @@ $(document).ready(function () {
                 },
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
                 $('#secondbutton').toggleClass('btn-primary focus');
+                reject('Some Error received at AJAX');
                 },
         });
     });    
