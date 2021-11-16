@@ -23,18 +23,18 @@ Saturation: To understand the utilization of CPUs, Memory & other resources. The
 Utilization: To understand for how many duration the resources are utilized to serve requests
 
 ## Create a Dashboard to measure our SLIs
-*TODO:* Create a dashboard to measure the uptime of the frontend and backend services We will also want to measure to measure 40x and 50x errors. Create a dashboard that show these values over a 24 hour period and take a screenshot.
+*DONE:* Create a dashboard to measure the uptime of the frontend and backend services We will also want to measure to measure 40x and 50x errors. Create a dashboard that show these values over a 24 hour period and take a screenshot.
 
 ## Tracing our Flask App
-*TODO:*  We will create a Jaeger span to measure the processes on the backend. Once you fill in the span, provide a screenshot of it here.
+*DONE:*  We will create a Jaeger span to measure the processes on the backend. Once you fill in the span, provide a screenshot of it here.
 
 ## Jaeger in Dashboards
-*TODO:* Now that the trace is running, let's add the metric to our current Grafana dashboard. Once this is completed, provide a screenshot of it here.
+*DONE:* Now that the trace is running, let's add the metric to our current Grafana dashboard. Once this is completed, provide a screenshot of it here.
 
 ## Report Error
-*TODO:* Using the template below, write a trouble ticket for the developers, to explain the errors that you are seeing (400, 500, latency) and to let them know the file that is causing the issue.
+*OUTOFSCOPE:* Using the template below, write a trouble ticket for the developers, to explain the errors that you are seeing (400, 500, latency) and to let them know the file that is causing the issue.
 
-TROUBLE TICKET
+TROUBLE TICKET (https://knowledge.udacity.com/questions/741672)
 
 Name:
 
@@ -50,10 +50,22 @@ Description:
 
 
 ## Creating SLIs and SLOs
-*TODO:* We want to create an SLO guaranteeing that our application has a 99.95% uptime per month. Name three SLIs that you would use to measure the success of this SLO.
+*DONE:* We want to create an SLO guaranteeing that our application has a 99.95% uptime per month. Name three SLIs that you would use to measure the success of this SLO.
+For each month, we have service minutes of 30 days x 24 hrs x 60 mins = 43,200 mins. To achieve 99.95% uptime means 43,179mins of uptime and 21mins of downtime. Below SLIs would be used to measure it:
+1) Monitor the Start Timings of the Pod along with the number of replicas. If the container is down it should not exceed 21mins of error budget
+2) Monitor the Traffic flow of the frontend and more specific to the Backend and Trial API serving the frontend. This is related in case there is downtime, as the downtime during no traffic or low traffic may give support in covering error budget.
+3) Percentage of Success hits to Frontend, Backend & Trial (which is currently giving more 500) should always be above 99.95% during the monthly duration
 
 ## Building KPIs for our plan
 *TODO*: Now that we have our SLIs and SLOs, create KPIs to accurately measure these metrics. We will make a dashboard for this, but first write them down here.
+1) "Percentage of Success Hits" to Backend should be 99.95% or above
+2) "Latency of Backend API" should be under 100 milliseconds
+3) CPU Utilization should be under 70%
+4) Memory Utilization should be under 70%
+5) Throughput of Read+Write of default namespace should be 1.5MB/s (subject to this disk in use)
+6) Current Network Bandwidth of Receive / Trasmit should be 1Mb/s
 
 ## Final Dashboard
-*TODO*: Create a Dashboard containing graphs that capture all the metrics of your KPIs and adequately representing your SLIs and SLOs. Include a screenshot of the dashboard here, and write a text description of what graphs are represented in the dashboard.  
+*DONE*: Create a Dashboard containing graphs that capture all the metrics of your KPIs and adequately representing your SLIs and SLOs. Include a screenshot of the dashboard here, and write a text description of what graphs are represented in the dashboard.  
+
+
