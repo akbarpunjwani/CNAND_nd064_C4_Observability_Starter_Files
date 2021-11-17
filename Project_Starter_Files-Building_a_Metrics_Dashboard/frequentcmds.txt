@@ -1,0 +1,84 @@
+cd C:\Users\Akbar.Punjwani\Documents\GitHub\CNAND_nd064_C4_Observability_Starter_Files\Project_Starter_Files-Building_a_Metrics_Dashboard
+vagrant ssh
+sudo su
+cd CNAND_nd064_C4_Observability_Starter_Files/Project_Starter_Files-Building_a_Metrics_Dashboard/
+clear
+
+
+kubectl get all -n monitoring
+kubectl get all -n observability
+kubectl get all
+kubectl get crd -n monitoring
+kubectl get all -n observability
+
+kubectl get pod -n monitoring
+kubectl get pod -n observability
+kubectl get pod
+
+
+
+# Terminal Tab 1
+kubectl port-forward service/prometheus-grafana --address 0.0.0.0 3000:80 -n monitoring
+# Terminal Tab 2
+kubectl port-forward service/prometheus-kube-prometheus-prometheus --address 0.0.0.0 9090:9090 -n monitoring
+# Terminal Tab 3
+kubectl port-forward -n observability  service/simplest-query --address 0.0.0.0 16686:16686
+# Terminal Tab 4
+kubectl port-forward -n monitoring service/prometheus-kube-prometheus-alertmanager --address 0.0.0.0 9093:3001
+kubectl port-forward service/hotrod 8080:3010 -n observability
+kubectl port-forward service/backend 8081:8081 -n observability
+
+git pull
+cd /home/vagrant/CNAND_nd064_C4_Observability_Starter_Files/Project_Starter_Files-Building_a_Metrics_Dashboard/reference-app/frontend/
+docker build -t punjwaniakbar/project3-frontend:v1 .
+docker push punjwaniakbar/project3-frontend:v1
+docker rmi punjwaniakbar/project3-frontend:v1
+cd ../../manifests/app/
+kubectl delete -f frontend.yaml
+kubectl get all,jaegers,servicemonitor
+kubectl apply -f frontend.yaml
+kubectl get all,jaegers,servicemonitor
+
+git pull
+cd /home/vagrant/CNAND_nd064_C4_Observability_Starter_Files/Project_Starter_Files-Building_a_Metrics_Dashboard/reference-app/backend/
+docker build -t punjwaniakbar/project3-backend:v1 .
+docker push punjwaniakbar/project3-backend:v1
+docker rmi punjwaniakbar/project3-backend:v1
+cd ../../manifests/app/
+kubectl delete -f backend.yaml
+kubectl get all,jaegers,servicemonitor
+kubectl apply -f backend.yaml
+kubectl get all,jaegers,servicemonitor
+
+git pull
+cd /home/vagrant/CNAND_nd064_C4_Observability_Starter_Files/Project_Starter_Files-Building_a_Metrics_Dashboard/reference-app/trial/
+docker build -t punjwaniakbar/project3-trial:v1 .
+docker push punjwaniakbar/project3-trial:v1
+docker rmi punjwaniakbar/project3-trial:v1
+cd ../../manifests/app/
+kubectl delete -f trial.yaml
+kubectl get all,jaegers,servicemonitor
+kubectl apply -f trial.yaml
+kubectl get all,jaegers,servicemonitor
+
+cd ../../manifests/app/
+kubectl delete -f frontend.yaml
+kubectl get all,jaegers,servicemonitor
+kubectl apply -f frontend.yaml
+kubectl get all,jaegers,servicemonitor
+kubectl delete -f backend.yaml
+kubectl get all,jaegers,servicemonitor
+kubectl apply -f backend.yaml
+kubectl get all,jaegers,servicemonitor
+kubectl delete -f trial.yaml
+kubectl get all,jaegers,servicemonitor
+kubectl apply -f trial.yaml
+kubectl get all,jaegers,servicemonitor
+
+
+
+kubectl describe statefulset prometheus-prometheus-kube-prometheus-prometheus -n monitoring
+kubectl describe statefulset alertmanager-prometheus-kube-prometheus-alertmanager -n monitoring
+kubectl describe configmap prometheus-prometheus-kube-prometheus-prometheus-rulefiles-0 -n monitoring
+
+https://www.daraz.pk/products/dawlance-85-kg-fully-automatic-top-load-washing-machine-dwt-255-clear-lid-i208784048-s1414506813.html?dsource=share&laz_share_info=19404022_3_100_600051744505_18359829_null&laz_token=27d039a1d3a79fd955e86da9ed713386
