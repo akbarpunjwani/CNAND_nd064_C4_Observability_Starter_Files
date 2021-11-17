@@ -7,7 +7,10 @@
 
 ## Setup the Jaeger and Prometheus source
 *DONE:* Expose Grafana to the internet and then setup Prometheus as a data source. Provide a screenshot of the home page after logging into Grafana.
+### Grafana Homepage
 ![Grafana Homepage after Admin Login](./answer-img/grafanahomepage_adminlogin.jpg?raw=true "Grafana Homepage after Adminlogin")
+### Grafana Data sources
+![Grafana Datasources showing Prometheus and Jaeger](./answer-img/grafanadatasources_prometheus.jpg?raw=true "Grafana Datasources showing Prometheus")
 
 ## Create a Basic Dashboard
 *DONE:* Create a dashboard in Grafana that shows Prometheus as a source. Take a screenshot and include it here.
@@ -27,7 +30,9 @@ Utilization: To understand for how many duration the resources are utilized to s
 
 ## Create a Dashboard to measure our SLIs
 *DONE:* Create a dashboard to measure the uptime of the frontend and backend services We will also want to measure to measure 40x and 50x errors. Create a dashboard that show these values over a 24 hour period and take a screenshot.
+### Last 6 Hours
 ![Uptime Dashboard Last6hours](./answer-img/UptimeDashboard_Last6hours.jpg?raw=true "Uptime Dashboard")
+### Last 24 Hours
 ![Uptime Dashboard Last24hours](./answer-img/UptimeDashboard_Last6hours.jpg?raw=true "UptimeDashboard Last24hours")
 
 ## Tracing our Flask App
@@ -59,18 +64,23 @@ Description:
 ## Creating SLIs and SLOs
 *DONE:* We want to create an SLO guaranteeing that our application has a 99.95% uptime per month. Name three SLIs that you would use to measure the success of this SLO.
 For each month, we have service minutes of 30 days x 24 hrs x 60 mins = 43,200 mins. To achieve 99.95% uptime means 43,179mins of uptime and 21mins of downtime. Below SLIs would be used to measure it:
-1) Monitor the Start Timings of the Pod along with the number of replicas. If the container is down it should not exceed 21mins of error budget
+1) Response to the customer request should be received within 200 milliseconds
 2) Monitor the Traffic flow of the frontend and more specific to the Backend and Trial API serving the frontend. This is related in case there is downtime, as the downtime during no traffic or low traffic may give support in covering error budget.
-3) Percentage of Success hits to Frontend, Backend & Trial (which is currently giving more 500) should always be above 99.95% during the monthly duration
+3) Percentage of Success hits to Frontend, Backend & Trial (currently trial app always give 500 for intended reason) should always be above 99.95% for the monthly duration
+4) Compute, Memory & Storage Utilization should be under 70% 
+5) Monitor the Start Timings of the Pod along with the number of replicas. If the container is down it should not exceed 21mins of error budget
 
 ## Building KPIs for our plan
-*TODO*: Now that we have our SLIs and SLOs, create KPIs to accurately measure these metrics. We will make a dashboard for this, but first write them down here.
-1) "Percentage of Success Hits" to Backend should be 99.95% or above
-2) "Latency of Backend API" should be under 100 milliseconds
-3) CPU Utilization should be under 70%
-4) Memory Utilization should be under 70%
-5) Throughput of Read+Write of default namespace should be 1.5MB/s (subject to this disk in use)
-6) Current Network Bandwidth of Receive / Trasmit should be 1Mb/s
+*DONE*: Now that we have our SLIs and SLOs, create KPIs to accurately measure these metrics. We will make a dashboard for this, but first write them down here.
+Error Budget:
+1) Frontend application Average Response Time: This indicates how quickly the frontend application respond to requests (e.g. it should always respond under 50 milliseconds in order to keep customer engaged while backend application processes)
+2) Backend API Average Response Time: This indicates how long it took, on average, to process the request to backend api endpoints (e.g. should be under 100 milliseconds)
+3) GET Requests (response status wise counts): Theses metrics would show the traffic inflow statistics for any specific period (e.g. Backend api should get total count of hits under 1000 when analyzed for last 6 hours)
+4) Percentage of Success Hits: This indicator will help to monitor how many customer hits got successful responses (e.g response from Backend api should be 99.95% or above)
+5) CPU Utilization: This metric will indicate the saturation level in our compute power (e.g CPU utilization should be under 70%)
+6) Memory Utilization: This metric will indicate how intensely the memory resources are consumed (e.g Memory utilization should be under 70%)
+7) Throughput of Disk Read+Write: The metric indicate how fast (per second) our storage is able to read/write data (e.g the namespace having frontend, backend and trial applications should get minimum 1.5MB/s)
+8) Network Bandwidth of Receive / Trasmit: This metric indicates the saturation level of the network (e.g network bandwidth should be minimum 1Mb/s for all read and write requests)
 
 ## Final Dashboard
 *DONE*: Create a Dashboard containing graphs that capture all the metrics of your KPIs and adequately representing your SLIs and SLOs. Include a screenshot of the dashboard here, and write a text description of what graphs are represented in the dashboard.  
